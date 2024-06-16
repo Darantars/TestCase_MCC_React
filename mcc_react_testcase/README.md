@@ -1,8 +1,19 @@
-# React + Vite
+# Веб-приложение для отображение и редактирования элементов иерархического дерева (React + Vite)
+	Функционал:
+	- Визуальное отображение дерева
+	- Добавление элементов(базовых и дочерних, уровень вложенности не ограничен)
+	- Изменение имени элементов
+	- Удаление элементов
+	- Перезапуск дерева
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+	Инструкция по запуску:
+	1. Использовать комманду: cd mcc_react_testcase
+	2. Использовать комманду: npm install
+	3. Использовать комманду: run dev
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+	Инструкция по ипользованию:
+	- Для добавления дочернего элемента нажмите кнопку "Add child" справа от элемента
+	- Для удаления элемента нажмите кнопку "Delete" справа от элемента
+	- Для изменения имени элемента нажмите на имя элемента и измените название в появившемся текстовом поле, после чего нажмите кнопку "Save" справа от поля
+	- Для сброса состояния дерева в начальное нажмите кнопку "Reset"
+		
