@@ -6,7 +6,7 @@ function App() {
     const [nodes, setNodes] = useState([
         {
             id: 1,
-            name: 'Root',
+            name: 'Main Tree Parent Node',
             children: [],
         },
     ]);
@@ -129,13 +129,14 @@ function App() {
         setNodes([
             {
                 id: 1,
-                name: 'Root',
+                name: 'Main Tree Parent Node',
                 children: [],
             },
         ]);
     };
     return (
         <div className="App">
+            <h1>Hierarchical Tree</h1>
             <Tree nodes={nodes} addNode={addNode} deleteNode={deleteNode} editNode={editNode} />
             <button onClick={resetTree}>Reset</button>
         </div>
