@@ -125,9 +125,19 @@ function App() {
         });
     };
 
+    const resetTree = () => {
+        setNodes([
+            {
+                id: 1,
+                name: 'Root',
+                children: [],
+            },
+        ]);
+    };
     return (
         <div className="App">
             <Tree nodes={nodes} addNode={addNode} deleteNode={deleteNode} editNode={editNode} />
+            <button onClick={resetTree}>Reset</button>
         </div>
     );
 }
