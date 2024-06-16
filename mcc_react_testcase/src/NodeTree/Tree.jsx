@@ -1,10 +1,9 @@
 import Node from './Node.jsx'
-
-const Tree = ({ tree, addNode, deleteNode, editNode }) => {
-
+import React, { useState } from 'react';
+const Tree = ({ nodes, addNode, deleteNode, editNode }) => {
     return (
         <ul>
-            {tree.map((node) => (
+            {nodes.map((node) => (
                 <Node
                     key={node.id}
                     node={node}

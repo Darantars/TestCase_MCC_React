@@ -3,55 +3,131 @@ import './App.css'
 import Node from './NodeTree/Node.jsx'
 import Tree from './NodeTree/Tree.jsx'
 function App() {
-    const [tree, setTree] = useState([{ id: 1, name: 'Root', children: [] }]);
+    const [nodes, setNodes] = useState([
+        {
+            id: 1,
+            name: 'Root',
+            children: [],
+        },
+    ]);
+
     const addNode = (parentId, name) => {
-        setTree((prevTree) => {
-            const updatedTree = [...prevTree];
-            const parentNode = updatedTree.find((node) => node.id === parentId);
-            const newNode = { id: Date.now(), name, children: [] };
-            if (parentNode) {
-                parentNode.children.push(newNode);
-            }
-            return updatedTree;
+        setNodes((prevNodes) => {
+            const newNode = {
+                id: Date.now(),
+                name,
+                children: [],
+            };
+
+            const updatedNodes = prevNodes.map((node) => {
+                if (node.id === parentId) {
+                    return {
+                        ...node,
+                        children: [...node.children, newNode],
+                    };
+                } else if (node.children.length > 0) {
+                    return {
+                        ...node,
+                        children: addNodeToChildren(node.children, parentId, newNode),
+                    };
+                }
+
+                return node;
+            });
+
+            return updatedNodes;
         });
     };
+
+    const addNodeToChildren = (children, parentId, newNode) => {
+        return children.map((child) => {
+            if (child.id === parentId) {
+                return {
+                    ...child,
+                    children: [...child.children, newNode],
+                };
+            } else if (child.children.length > 0) {
+                return {
+                    ...child,
+                    children: addNodeToChildren(child.children, parentId, newNode),
+                };
+            }
+
+            return child;
+        });
+    };
+
     const deleteNode = (nodeId) => {
-        setTree((prevTree) => {
-            const updatedTree = prevTree.filter((node) => node.id !== nodeId);
-            updatedTree.forEach((node) => {
-                node.children = node.children.filter((child) => child.id !== nodeId);
+        setNodes((prevNodes) => {
+            const updatedNodes = prevNodes.filter((node) => node.id !== nodeId);
+
+            return updatedNodes.map((node) => {
+                if (node.children.length > 0) {
+                    return {
+                        ...node,
+                        children: deleteNodeFromChildren(node.children, nodeId),
+                    };
+                }
+
+                return node;
             });
-            return updatedTree;
+        });
+    };
+
+    const deleteNodeFromChildren = (children, nodeId) => {
+        return children.filter((child) => child.id !== nodeId).map((child) => {
+            if (child.children.length > 0) {
+                return {
+                    ...child,
+                    children: deleteNodeFromChildren(child.children, nodeId),
+                };
+            }
+
+            return child;
         });
     };
 
     const editNode = (nodeId, newName) => {
-        setTree((prevTree) => {
-            const updatedTree = prevTree.map((node) =>
-                node.id === nodeId ? { ...node, name: newName } : node
-            );
-            updatedTree.forEach((node) => {
-                node.children = node.children.map((child) =>
-                    child.id === nodeId ? { ...child, name: newName } : child
-                );
+        setNodes((prevNodes) => {
+            return prevNodes.map((node) => {
+                if (node.id === nodeId) {
+                    return {
+                        ...node,
+                        name: newName,
+                    };
+                } else if (node.children.length > 0) {
+                    return {
+                        ...node,
+                        children: editNodeInChildren(node.children, nodeId, newName),
+                    };
+                }
+
+                return node;
             });
-            return updatedTree;
         });
     };
 
-    const resetTree = () => {
-        setTree([{ id: 1, name: 'Root', children: [] }]);
+    const editNodeInChildren = (children, nodeId, newName) => {
+        return children.map((child) => {
+            if (child.id === nodeId) {
+                return {
+                    ...child,
+                    name: newName,
+                };
+            } else if (child.children.length > 0) {
+                return {
+                    ...child,
+                    children: editNodeInChildren(child.children, nodeId, newName),
+                };
+            }
+
+            return child;
+        });
     };
 
     return (
-        <div className="treeContainer">
-            <button onClick={() => resetTree()}>Reset</button>
-            <Tree
-                tree={tree}
-                addNode={addNode}
-                deleteNode={deleteNode}
-                editNode={editNode}
-            />
+        <div className="App">
+            <Tree nodes={nodes} addNode={addNode} deleteNode={deleteNode} editNode={editNode} />
         </div>
     );
 }

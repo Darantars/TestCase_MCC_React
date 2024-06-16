@@ -1,47 +1,54 @@
 import React, { useState } from 'react';
+import Tree from './Tree.jsx'
 
 const Node = ({ node, addNode, deleteNode, editNode }) => {
     const [isEditing, setIsEditing] = useState(false);
-    const [newName, setNewName] = useState(node.name);
+    const [newName, setNewName] = useState('');
 
-    const handleAddNode = () => {
-        addNode(node.id, 'New Node');
+    const handleEdit = () => {
+        setIsEditing(true);
+        setNewName(node.name);
     };
 
-    const handleDeleteNode = () => {
-        deleteNode(node.id);
-    };
-
-    const handleEditNode = () => {
+    const handleSave = () => {
         editNode(node.id, newName);
         setIsEditing(false);
     };
 
-    const handleInputChange = (e) => {
-        setNewName(e.target.value);
-    };
-
-    const handleEditClick = () => {
-        setIsEditing(true);
+    const handleAddChild = () => {
+        addNode(node.id, 'New Child Node');
     };
 
     return (
         <li>
             {isEditing ? (
                 <>
-                    <input type="text" value={newName} onChange={handleInputChange} />
-                    <button onClick={handleEditNode}>Save</button>
+                    <input
+                        type="text"
+                        value={newName}
+                        onChange={(e) => setNewName(e.target.value)}
+                    />
+                    <button onClick={handleSave}>Save</button>
                 </>
             ) : (
                 <>
-                    <span>{node.name}</span>
-                    <button onClick={handleEditClick}>Edit</button>
+                    <span onClick={handleEdit}>{node.name}</span>
+                    <button onClick={handleAddChild}>Add Child</button>
+                    <button onClick={() => deleteNode(node.id)}>Delete</button>
                 </>
             )}
-            <button onClick={handleAddNode}>Add Node</button>
-            <button onClick={handleDeleteNode}>Delete Node</button>
             {node.children.length > 0 && (
-                <Tree tree={node.children} addNode={addNode} deleteNode={deleteNode} editNode={editNode} />
+                <ul>
+                    {node.children.map((childNode) => (
+                        <Node
+                            key={childNode.id}
+                            node={childNode}
+                            addNode={addNode}
+                            deleteNode={deleteNode}
+                            editNode={editNode}
+                        />
+                    ))}
+                </ul>
             )}
         </li>
     );
